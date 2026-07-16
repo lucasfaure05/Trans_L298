@@ -1,0 +1,26 @@
+# Secrets
+.env
+*.env.local
+
+# Raw footage and rendered output (large binaries - keep the repo light)
+footage/*
+!footage/.gitkeep
+!footage/README.md
+footage/edit/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# Node
+node_modules/
+.npm/
+
+# HyperFrames project artifacts
+**/hyperframes.json.bak
+**/*.hf-cache/
+
+# OS
+.DS_Store
