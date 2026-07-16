@@ -1,14 +1,14 @@
-"""Batch-transcribe every video in a directory with 4 parallel workers.
+﻿"""Batch-transcribe every video in a directory with 4 parallel workers.
 
-Walks <videos_dir> for common video extensions, runs ElevenLabs Scribe on
-each, writes transcripts to <videos_dir>/edit/transcripts/<name>.json.
+Walks <videos_dir> for common video extensions, runs the OpenAI
+transcription API on each, writes transcripts to
+<videos_dir>/edit/transcripts/<name>.json.
 
 Cached per-file: any source that already has a transcript is skipped.
 
 Usage:
     python helpers/transcribe_batch.py <videos_dir>
     python helpers/transcribe_batch.py <videos_dir> --workers 4
-    python helpers/transcribe_batch.py <videos_dir> --num-speakers 2
     python helpers/transcribe_batch.py <videos_dir> --edit-dir /custom/edit
 """
 
@@ -50,12 +50,6 @@ def main() -> None:
         default=None,
         help="Optional ISO language code. Omit to auto-detect per file.",
     )
-    ap.add_argument(
-        "--num-speakers",
-        type=int,
-        default=None,
-        help="Optional number of speakers. Improves diarization when known.",
-    )
     args = ap.parse_args()
 
     videos_dir = args.videos_dir.resolve()
@@ -91,7 +85,6 @@ def main() -> None:
                 edit_dir=edit_dir,
                 api_key=api_key,
                 language=args.language,
-                num_speakers=args.num_speakers,
                 verbose=False,
             ): v
             for v in pending
@@ -100,7 +93,7 @@ def main() -> None:
             v = futures[fut]
             try:
                 out = fut.result()
-                print(f"  + {v.stem}  →  {out.name}")
+                print(f"  + {v.stem}  ->  {out.name}")
             except Exception as e:
                 errors.append((v, str(e)))
                 print(f"  x {v.stem}  FAILED: {e}")

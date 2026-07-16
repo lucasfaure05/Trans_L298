@@ -1,4 +1,4 @@
-# Video editing studio
+﻿# Video editing studio
 
 This repo is a conversation-driven video editing studio, powered by two
 open-source Claude Code skills:
@@ -19,21 +19,25 @@ available in every session - no manual install step.
 
 ## Layout
 
-.claude/skills/ symlinks Claude Code reads (-> .agents/skills/)
-.agents/skills/ canonical skill sources (video-use, hyperframes-, ...)
-agent/skills/ duplicate copies in "universal" layout for other
-agents (Codex, Cursor, etc.) - kept in sync by the
-hyperframes skills add installer, not hand-edited
-footage/ drop your raw takes here; outputs land in footage/edit/
+- `.claude/skills/` - symlinks Claude Code reads (points into `.agents/skills/`)
+- `.agents/skills/` - canonical skill sources (video-use, hyperframes-*, ...)
+- `agent/skills/` - duplicate copies in "universal" layout for other agents
+  (Codex, Cursor, etc.) - kept in sync by the hyperframes `skills add`
+  installer, not hand-edited
+- `footage/` - drop your raw takes here; outputs land in `footage/edit/`
+
 ## One-time setup
 
 1. **ffmpeg** - required by video-use, installed automatically by the
    session-start hook (`.claude/hooks/session-start.sh`) in Claude Code on
    the web. Locally: `brew install ffmpeg` (macOS) or
    `sudo apt install ffmpeg` (Debian/Ubuntu) or download a build for Windows.
-2. **ElevenLabs API key** - required for transcription (Scribe). Copy
+2. **OpenAI API key** - required for transcription (Whisper). Copy
    `.env.example` to `.env` and paste your key from
-   https://elevenlabs.io/app/settings/api-keys. Never commit `.env`.
+   https://platform.openai.com/api-keys. Never commit `.env`. Note: no
+   speaker diarization or audio-event tagging (those are ElevenLabs
+   Scribe-only features) - best for single-speaker footage. Uploads are
+   capped at 25MB (~50 min at the 64kbps mono mp3 this project extracts).
 3. **Node.js 22+** - required by HyperFrames (invoked via `npx hyperframes`,
    no global install needed).
 
